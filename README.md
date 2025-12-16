@@ -105,6 +105,16 @@ The protocols and templates for each phase are located in the `.spec-rules/` dir
 3.  **执行**: 按顺序执行各个阶段 (准备 -> 需求 -> 设计 -> 计划 -> 实现)。
 4.  **验证**: 在进入下一阶段前，使用 `*-QA.md` 检查清单进行验证。
 
+### Status Tracking (STATUS.json) / 状态跟踪 (STATUS.json)
+
+The `STATUS.json` file is the **Source of Truth** for the project state. The Agent uses this file to maintain context across sessions.
+`STATUS.json` 文件是项目状态的 **唯一真理来源**。智能体使用此文件在会话之间保持上下文。
+
+*   **Managed by AI**: The Agent is responsible for creating and updating this file.
+    **由 AI 管理**: 智能体负责创建和更新此文件。
+*   **Protocol**: See `.spec-rules/README.md` (Section 0.1) for the detailed schema and lifecycle rules.
+    **协议**: 详见 `.spec-rules/README.md` (第 0.1 节) 中的详细模式和生命周期规则。
+
 ---
 
 ## 🤖 Agent Role / 智能体角色
