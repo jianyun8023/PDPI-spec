@@ -1,68 +1,53 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$comment": "Template for spec module status tracking",
+  "_comment": "STATUS.json Template - AI creates and updates this file",
+  "_usage": "Copy this template to specs/[module-name]/STATUS.json",
   
   "module": "[module-name]",
   "displayName": "[Human Readable Name]",
   "createdAt": "YYYY-MM-DD",
-  "updatedAt": "YYYY-MM-DD",
+  "lastUpdated": "YYYY-MM-DD",
   
-  "currentPhase": "PREWORK | REQUIREMENTS | DESIGN | PLAN | IMPLEMENTATION | ACCEPTANCE | COMPLETE",
-  "currentStatus": "IN_PROGRESS | BLOCKED | APPROVED | REJECTED",
+  "currentPhase": "PREWORK",
+  "preworkRefreshedAt": "YYYY-MM-DD",
   
-  "phaseHistory": [
-    {
-      "phase": "PREWORK",
-      "status": "APPROVED",
-      "date": "YYYY-MM-DD",
-      "reviewer": "AI/Human",
-      "notes": ""
-    },
-    {
-      "phase": "REQUIREMENTS", 
-      "status": "APPROVED",
-      "date": "YYYY-MM-DD",
-      "reviewer": "AI/Human",
-      "notes": ""
-    },
-    {
-      "phase": "DESIGN",
-      "status": "IN_PROGRESS",
-      "date": "YYYY-MM-DD",
-      "reviewer": null,
-      "notes": ""
-    }
-  ],
+  "phaseHistory": [],
   
-  "blockers": [
-    {
-      "id": "BLK-001",
-      "description": "Waiting for auth module to be ready",
-      "dependency": "auth-module",
-      "status": "OPEN | RESOLVED",
-      "createdAt": "YYYY-MM-DD",
-      "resolvedAt": null
-    }
-  ],
+  "blockers": [],
   
-  "changeRequests": [
-    {
-      "id": "CR-001",
-      "type": "SCOPE_CHANGE | BUG_FIX | CLARIFICATION",
-      "description": "Add support for offline mode",
-      "requestedBy": "Product Owner",
-      "impactedPhases": ["REQUIREMENTS", "DESIGN"],
-      "status": "PENDING | APPROVED | REJECTED | DEFERRED",
-      "decision": "",
-      "createdAt": "YYYY-MM-DD",
-      "resolvedAt": null
-    }
-  ],
+  "changeRequests": [],
   
   "metrics": {
-    "totalEstimatedEffort": "X hours",
-    "actualEffort": "Y hours",
+    "totalEstimatedEffort": null,
+    "actualEffort": null,
     "backtrackCount": 0,
     "changeRequestCount": 0
+  },
+
+  "_schema": {
+    "currentPhase": ["PREWORK", "REQUIREMENTS", "DESIGN", "PLAN", "IMPLEMENTATION", "ACCEPTANCE", "COMPLETE"],
+    "phaseHistory_entry": {
+      "phase": "string (phase name)",
+      "status": ["IN_PROGRESS", "APPROVED", "REJECTED", "INVALIDATED"],
+      "date": "YYYY-MM-DD",
+      "notes": "string (optional)"
+    },
+    "blockers_entry": {
+      "id": "BLK-XXX",
+      "description": "string",
+      "dependency": "string (optional)",
+      "status": ["OPEN", "RESOLVED"],
+      "createdAt": "YYYY-MM-DD",
+      "resolvedAt": "YYYY-MM-DD or null"
+    },
+    "changeRequests_entry": {
+      "id": "CR-XXX",
+      "type": ["SCOPE_CHANGE", "BUG_FIX", "CLARIFICATION"],
+      "description": "string",
+      "impactedPhases": ["array of phase names"],
+      "status": ["PENDING", "APPROVED", "REJECTED", "DEFERRED"],
+      "decision": "string",
+      "createdAt": "YYYY-MM-DD",
+      "resolvedAt": "YYYY-MM-DD or null"
+    }
   }
 }

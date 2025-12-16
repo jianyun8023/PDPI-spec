@@ -7,13 +7,36 @@
 ## 0. Execution Protocol (MANDATORY - Read First)
 
 ### 0.1 STATUS.json Protocol (CRITICAL)
-> **EVERY session MUST start and end with STATUS.json operations.**
+> **AI is responsible for creating and updating STATUS.json. User may edit manually; AI treats file content as source of truth.**
 
+#### When to CREATE
+```
+IF user starts a new module/feature:
+  1. CREATE `specs/[module-name]/STATUS.json` from template
+  2. SET module = "[module-name]"
+  3. SET currentPhase = "PREWORK"
+  4. SET phaseHistory = []
+  5. SET lastUpdated = current date (YYYY-MM-DD)
+```
+
+#### When to UPDATE
+| Trigger | Action |
+|---------|--------|
+| **Phase Start** | Set `currentPhase` to new phase name |
+| **Phase Complete (QA Pass)** | Add `{phase, status: "APPROVED", date}` to `phaseHistory`, set `currentPhase` to next phase |
+| **Phase Rejected (QA Fail)** | Add `{phase, status: "REJECTED", date}` to `phaseHistory`, keep `currentPhase` unchanged |
+| **Blocker Found** | Add entry to `blockers` array with description |
+| **Change Request** | Add entry to `changeRequests` array |
+| **Session End** | Update `lastUpdated` timestamp |
+| **Backtrack** | Set `currentPhase` to target phase, add `{phase, status: "INVALIDATED", date}` for downstream phases |
+
+#### Session Lifecycle
 ```
 ON SESSION START:
   1. READ `specs/[module]/STATUS.json`
   2. IF not exists: CREATE from template before ANY work
   3. IDENTIFY currentPhase and resume from there
+  4. REPORT: "Resuming [module] from [currentPhase]"
 
 ON PHASE COMPLETE:
   1. UPDATE STATUS.json with new phase status
@@ -22,8 +45,16 @@ ON PHASE COMPLETE:
 
 ON SESSION END:
   1. UPDATE STATUS.json with current progress
-  2. REPORT what was completed and what remains
+  2. UPDATE lastUpdated to current date
+  3. REPORT what was completed and what remains
 ```
+
+#### Format Rules
+- Date format: ISO 8601 (`YYYY-MM-DD`)
+- Always validate JSON before writing
+- Always include `lastUpdated` field
+- Phase names: `PREWORK`, `REQUIREMENTS`, `DESIGN`, `PLAN`, `IMPLEMENTATION`, `ACCEPTANCE`, `COMPLETE`
+- Status values: `IN_PROGRESS`, `APPROVED`, `REJECTED`, `INVALIDATED`
 
 ### 0.2 Phase Detection Logic (Intent Router)
 > **Use this decision tree to determine which phase to enter.**
