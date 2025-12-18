@@ -1,51 +1,50 @@
-# 🤖 Spec-Driven Development (SDD) 规则
+# 🤖 Spec-Driven Development (SDD) Rules
 
-> **重要**: 这些规则已被优化以减少上下文消耗。核心协议在 [`AGENTS.md`](../AGENTS.md) 中自动注入。
-
----
-
-## 🎯 快速开始
-
-### 自动规则注入
-
-Cursor 会自动加载 [`AGENTS.md`](../AGENTS.md) 文件（官方规范），其中包含：
-- ✅ 核心SDD协议（150行）
-- ✅ Phase路由逻辑（自动识别用户意图）
-- ✅ STATUS.json协议（自动状态管理）
-- ✅ 禁止行为清单（防止反模式）
-
-**无需手动@文件** - AI 会自动知道：
-- 如何检测你的意图（"我想要..." → PREWORK + REQUIREMENTS）
-- 当前在哪个阶段（从 STATUS.json 读取）
-- 该加载哪些规则（根据 currentPhase 动态加载）
-
-> **AGENTS.md**: Cursor 官方支持的 AI Agent 配置规范，位于项目根目录自动生效
+> **Important**: These rules have been optimized to reduce context consumption. Core protocol is auto-injected in [`AGENTS.md`](../AGENTS.md).
 
 ---
 
-## 📁 目录结构
+## 🎯 Quick Start
+
+### Automatic Rule Injection
+
+Cursor automatically loads [`AGENTS.md`](../AGENTS.md) file (official specification), which includes:
+- ✅ Core SDD protocol (150 lines)
+- ✅ Phase routing logic (automatically identify user intent)
+- ✅ STATUS.json protocol (automatic state management)
+- ✅ Anti-pattern blocklist (prevent anti-patterns)
+
+**No need to manually @ file** - AI automatically knows:
+- How to detect your intent ("I want..." / "我想要..." → PREWORK + REQUIREMENTS)
+- Current phase (read from STATUS.json)
+- Which rules to load (dynamically load based on currentPhase)
+
+> **AGENTS.md**: Cursor's officially supported AI Agent configuration specification, automatically active when placed in project root
+
+---
+
+## 📁 Directory Structure
 
 ```
 .spec-rules/
-├── core/                    # 核心协议（始终加载）
-│   ├── protocol.md          # SDD核心流程与状态机
-│   ├── phase-router.md      # 意图检测与路由
-│   └── anti-patterns.md     # 禁止行为清单
+├── core/                    # Core protocol (always loaded)
+│   ├── protocol.md          # SDD core workflow & state machine
+│   ├── phase-router.md      # Intent detection & routing
+│   └── anti-patterns.md     # Anti-pattern blocklist
 │
-├── phases/                  # 阶段规则（按需加载）
-│   ├── PREWORK.md           # Phase 0: 上下文收集
-│   ├── REQUIREMENTS.md      # Phase 1: 需求定义
-│   ├── DESIGN.md            # Phase 2: 系统设计
-│   ├── PLAN.md              # Phase 3: 实施计划
-│   └── IMPLEMENTATION.md    # Phase 4: 代码实现
+├── phases/                  # Phase rules (loaded on demand)
+│   ├── PREWORK.md           # Phase 0: Context gathering
+│   ├── REQUIREMENTS.md      # Phase 1: Requirements definition
+│   ├── DESIGN.md            # Phase 2: System design
+│   ├── PLAN.md              # Phase 3: Implementation plan
+│   └── IMPLEMENTATION.md    # Phase 4: Code implementation
 │
-└── reference/               # 参考资料（需要时查阅）
-    ├── README-FULL.md       # 完整详细文档（原README）
-    ├── glossary.md          # 术语表
-    ├── templates/           # 文档模板
+└── reference/               # Reference materials (consult when needed)
+    ├── glossary.md          # Glossary
+    ├── templates/           # Document templates
     │   ├── STATUS.template.json
     │   └── CHANGE-REQUEST.template.md
-    └── examples/            # 技术栈示例
+    └── examples/            # Tech stack examples
         ├── nextjs-trpc-prisma/
         ├── express-mongoose/
         └── python-fastapi/
@@ -53,179 +52,179 @@ Cursor 会自动加载 [`AGENTS.md`](../AGENTS.md) 文件（官方规范），�
 
 ---
 
-## ⚡ 智能规则加载
+## ⚡ Smart Rule Loading
 
-### 上下文消耗优化
+### Context Consumption Optimization
 
-**之前**（旧结构）:
+**Before** (old structure):
 ```
-初始加载：README.md (529行) + phase文件 (294行) + QA文件 (92行) 
-= 约 915行
-```
-
-**现在**（优化后）:
-```
-初始加载：AGENTS.md (314行，官方规范) + 当前phase文件 (约100行)
-= 约 414行（↓55%）
-仅核心规则：150行精简版 → 进一步优化空间
+Initial load: README.md (529 lines) + phase files (294 lines) + QA files (92 lines) 
+= ~915 lines
 ```
 
-### 动态加载机制
+**Now** (optimized):
+```
+Initial load: AGENTS.md (314 lines, official spec) + current phase file (~100 lines)
+= ~414 lines (↓55%)
+Core rules only: 150-line streamlined version → further optimization space
+```
 
-AI 会根据 `STATUS.json` 中的 `currentPhase` 自动加载对应规则：
+### Dynamic Loading Mechanism
+
+AI automatically loads corresponding rules based on `currentPhase` in `STATUS.json`:
 
 ```javascript
-// 伪代码示例
+// Pseudocode example
 on_conversation_start() {
   status = read("specs/[module]/STATUS.json")
   phase = status.currentPhase
   
-  // 只加载必要规则
-  load("AGENTS.md")                   // 始终加载（Cursor官方规范）
-  load("core/protocol.md")            // 始终加载
-  load(`phases/${phase}.md`)          // 动态加载
+  // Only load necessary rules
+  load("AGENTS.md")                   // Always load (Cursor official spec)
+  load("core/protocol.md")            // Always load
+  load(`phases/${phase}.md`)          // Dynamic load
   
-  display(`📍 恢复：${status.nextAction}`)
-  display(`💡 提醒：${status.lastAIReminder}`)
+  display(`📍 Resuming: ${status.nextAction}`)
+  display(`💡 Reminder: ${status.lastAIReminder}`)
 }
 ```
 
 ---
 
-## 🔄 完整流程
+## 🔄 Complete Workflow
 
 ```mermaid
 graph LR
-    Start([用户请求]) --> Auto[AGENTS.md 自动加载]
-    Auto --> Router[Phase Router 识别意图]
-    Router --> Load[动态加载对应phase规则]
-    Load --> Execute[执行phase任务]
-    Execute --> QA[QA检查pass 嵌入在phase文件]
-    QA --> Next[进入下一phase]
+    Start([User Request]) --> Auto[AGENTS.md auto-loads]
+    Auto --> Router[Phase Router identifies intent]
+    Router --> Load[Dynamically load corresponding phase rules]
+    Load --> Execute[Execute phase tasks]
+    Execute --> QA[QA check pass embedded in phase file]
+    QA --> Next[Enter next phase]
 ```
 
 ---
 
-## 📋 STATUS.json 增强
+## 📋 STATUS.json Enhancement
 
-新增字段帮助快速恢复上下文：
+New fields help quickly restore context:
 
 ```json
 {
   "currentPhase": "IMPLEMENTATION",
-  "nextAction": "执行步骤1.3：创建API路由",
-  "contextSummary": "用户正在构建登录功能，已完成schema设计",
+  "nextAction": "Execute step 1.3: Create API route",
+  "contextSummary": "User building login feature, completed schema design",
   "rulesLoaded": [
     "core/protocol.md",
     "phases/IMPLEMENTATION.md"
   ],
-  "lastAIReminder": "记住：必须运行验证命令才能进入下一步"
+  "lastAIReminder": "Remember: Must run verification command before next step"
 }
 ```
 
 ---
 
-## 🚀 常用命令
+## 🚀 Common Commands
 
-### 用户自然语言
-| 你说的话 | AI的理解 | 加载的规则 |
+### User Natural Language (CN/EN)
+| What You Say | AI Understanding | Loaded Rules |
 |---------|---------|-----------|
-| "我想要登录功能" | 新需求 | PREWORK + REQUIREMENTS |
-| "设计" / "架构" | 设计阶段 | DESIGN |
-| "计划" / "步骤" | 计划阶段 | PLAN |
-| "开始" / "实现" | 实现阶段 | IMPLEMENTATION |
-| "状态" / "进度" | 状态查询 | 读取 STATUS.json |
+| "我想要登录功能" / "I want login feature" | New requirement | PREWORK + REQUIREMENTS |
+| "设计" / "design" / "架构" / "architecture" | Design phase | DESIGN |
+| "计划" / "plan" / "步骤" / "steps" | Planning phase | PLAN |
+| "开始" / "start" / "实现" / "implement" | Implementation phase | IMPLEMENTATION |
+| "状态" / "status" / "进度" / "progress" | Status query | Read STATUS.json |
 
-### Phase之间的自动前置检查
+### Automatic Prerequisite Check Between Phases
 
-AI 会自动验证：
+AI automatically verifies:
 ```
-进入 DESIGN → 检查 requirements.md 是否存在
-进入 PLAN → 检查 design.md 是否存在
-进入 IMPLEMENTATION → 检查 plan.md 是否存在
+Enter DESIGN → Check if requirements.md exists
+Enter PLAN → Check if design.md exists
+Enter IMPLEMENTATION → Check if plan.md exists
 ```
 
-不满足前置条件会被**自动拒绝**并告知缺少什么。
+If prerequisites not met, will be **automatically rejected** and told what's missing.
 
 ---
 
-## 🎓 学习路径
+## 🎓 Learning Path
 
-### 1. 第一次使用？
-阅读：[`../.cursorrules`](../.cursorrules) （5分钟）
+### 1. First Time Using?
+Read: [`../.cursorrules`](../.cursorrules) (5 minutes)
 
-### 2. 想了解核心流程？
-阅读：[`core/protocol.md`](core/protocol.md) （10分钟）
+### 2. Want to Understand Core Workflow?
+Read: [`core/protocol.md`](core/protocol.md) (10 minutes)
 
-### 3. 想深入某个阶段？
-阅读：[`phases/{PHASE_NAME}.md`](phases/) （每个5-10分钟）
+### 3. Want to Deep Dive into a Phase?
+Read: [`phases/{PHASE_NAME}.md`](phases/) (5-10 minutes each)
 
-### 4. 需要完整参考？
-阅读：[`reference/README-FULL.md`](reference/README-FULL.md) （完整529行原文档）
+### 4. Need Complete Reference?
+Read: [`reference/README-FULL.md`](reference/README-FULL.md) (Complete 529-line original documentation)
 
-### 5. 查术语？
-阅读：[`reference/glossary.md`](reference/glossary.md)
+### 5. Look Up Terms?
+Read: [`reference/glossary.md`](reference/glossary.md)
 
 ---
 
-## 📊 效果对比
+## 📊 Effectiveness Comparison
 
-| 指标 | 旧结构 | 新结构 | 改善 |
+| Metric | Old Structure | New Structure | Improvement |
 |------|--------|--------|------|
-| **初始加载token** | ~915行 | ~250行 | ↓72% |
-| **规则查找时间** | 需翻阅多个文件 | 单文件直达 | ↓60% |
-| **AI注意力漂移** | 中等 | 低 | ↑40% |
-| **跨会话一致性** | 中等（需@文件） | 高（.cursorrules自动） | ↑50% |
-| **学习曲线** | 陡峭 | 平缓（分层渐进） | ↑30% |
+| **Initial Load Tokens** | ~915 lines | ~250 lines | ↓72% |
+| **Rule Lookup Time** | Need to browse multiple files | Single file direct access | ↓60% |
+| **AI Attention Drift** | Medium | Low | ↑40% |
+| **Cross-Session Consistency** | Medium (need @ file) | High (.cursorrules auto) | ↑50% |
+| **Learning Curve** | Steep | Gradual (layered progressive) | ↑30% |
 
 ---
 
-## 🔧 故障排除
+## 🔧 Troubleshooting
 
-### AI忘记遵循规则？
-- **检查**: `AGENTS.md` 文件在项目根目录吗？
-- **方案**: Cursor 自动加载此文件（官方规范）
+### AI Forgetting to Follow Rules?
+- **Check**: Is `AGENTS.md` file in project root?
+- **Solution**: Cursor automatically loads this file (official spec)
 
-### AI跳过阶段？
-- **检查**: `STATUS.json` 是否存在？
-- **方案**: AI 会检查前置条件并拒绝跳过
+### AI Skipping Phases?
+- **Check**: Does `STATUS.json` exist?
+- **Solution**: AI will check prerequisites and refuse skipping
 
-### 上下文太长？
-- **检查**: AI是否加载了太多规则文件？
-- **方案**: 智能加载机制确保只加载当前phase
+### Context Too Long?
+- **Check**: Is AI loading too many rule files?
+- **Solution**: Smart loading mechanism ensures only current phase loaded
 
-### 找不到详细文档？
-- **方案**: 查看 [`reference/README-FULL.md`](reference/README-FULL.md)
-
----
-
-## ⚠️ 重要提醒
-
-1. **不要手动编辑 `AGENTS.md`**（除非你知道自己在做什么）
-2. **AGENTS.md 是 Cursor 官方规范** - 自动加载，无需配置
-3. **STATUS.json 是唯一真实来源** - AI 和用户都可以编辑，AI 视文件内容为准
-4. **Phase顺序不能跳过** - 这是硬性约束，不是建议
-5. **QA检查已嵌入** - 每个phase文件末尾都有QA清单，无需单独@QA文件
+### Can't Find Detailed Documentation?
+- **Solution**: See [`reference/README-FULL.md`](reference/README-FULL.md)
 
 ---
 
-## 📖 额外资源
+## ⚠️ Important Reminders
 
-- **完整文档**: [`reference/README-FULL.md`](reference/README-FULL.md)
-- **术语表**: [`reference/glossary.md`](reference/glossary.md)
-- **模板**: [`reference/templates/`](reference/templates/)
-- **示例**: [`reference/examples/`](reference/examples/)
-
----
-
-## 🎯 核心理念
-
-> **"慢即是稳，稳即是快。"**  
-> **"没有计划就是计划失败。"**  
-> **"文档即代码，QA即生命线。"**
+1. **Don't manually edit `AGENTS.md`** (unless you know what you're doing)
+2. **AGENTS.md is Cursor official spec** - Auto-loads, no configuration needed
+3. **STATUS.json is single source of truth** - Both AI and users can edit, AI treats file content as authoritative
+4. **Phase sequence cannot skip** - This is hard constraint, not suggestion
+5. **QA checks embedded** - Each phase file has QA checklist at end, no need to separately @ QA file
 
 ---
 
-**版本**: 2.0 (优化版)  
-**优化日期**: 2024-12  
-**改进**: 上下文消耗↓72%, 分层架构, 智能加载
+## 📖 Additional Resources
+
+- **Complete Documentation**: [`reference/README-FULL.md`](reference/README-FULL.md)
+- **Glossary**: [`reference/glossary.md`](reference/glossary.md)
+- **Templates**: [`reference/templates/`](reference/templates/)
+- **Examples**: [`reference/examples/`](reference/examples/)
+
+---
+
+## 🎯 Core Philosophy
+
+> **"Slow is smooth, smooth is fast."**  
+> **"Failing to plan is planning to fail."**  
+> **"Documentation is code, QA is the lifeline."**
+
+---
+
+**Version**: 2.0 (Optimized)  
+**Optimization Date**: 2024-12  
+**Improvements**: Context consumption ↓72%, Layered architecture, Smart loading

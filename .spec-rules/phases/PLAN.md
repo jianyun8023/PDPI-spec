@@ -1,262 +1,261 @@
-# 📅 Phase 3: PLAN（实施计划）
+# 📅 Phase 3: PLAN (Implementation Plan)
 
-> **角色**: 高级工程经理  
-> **目标**: 将设计规格转化为线性、安全、可验证的步骤（"运行手册"）  
-> **QA角色**: DevOps守门员
-
----
-
-## 核心原则（"安全路径"准则）
-
-1. **原子步骤**：
-   - 每步必须足够小，可在**一次AI轮次**或一次git提交中完成
-   - ❌ "实现认证"（太大）
-   - ✅ "创建User schema" → "设置tRPC路由" → "创建登录表单"
-
-2. **依赖顺序&切片**：
-   - **简单功能**: 水平切片（DB → API → UI）
-   - **复杂功能**: 垂直切片（子功能A [DB→API→UI] → 子功能B [DB→API→UI]）
-   - **规则**: 切片内，依赖必须满足（Schema在Router前，Router在UI前）
-
-3. **可验证检查点**：
-   - 每步必须有**验证命令**或**手动检查**
-   - "如何知道此步骤正确完成？"
-   - **关键**: 复杂流程拆分到每步有**二元结果**（通过/失败）
-
-4. **绿到绿**：
-   - 项目应在*每一步后*编译和运行
-   - 避免"破坏状态"（步骤1破坏应用，步骤5修复）
-
-5. **上下文感知**：
-   - 必须引用现有文件
-   - 不要说"创建 utils.ts"，说"更新 `src/utils/format.ts`"
+> **Role**: Senior Engineering Manager  
+> **Objective**: Transform design spec into linear, safe, verifiable steps ("Runbook")  
+> **QA Role**: DevOps Gatekeeper
 
 ---
 
-## 输出模板（强制）
+## Core Principles ("Safe Path" Guidelines)
 
-### 标准策略（滚动波+TDD）
-*95%任务的默认策略。不要一次规划超过1个阶段*
+1. **Atomic Steps**:
+   - Each step must be small enough to complete in **one AI turn** or one git commit
+   - ❌ "Implement authentication" (too big)
+   - ✅ "Create User schema" → "Setup tRPC route" → "Create login form"
+
+2. **Dependency Order & Slicing**:
+   - **Simple features**: Horizontal slicing (DB → API → UI)
+   - **Complex features**: Vertical slicing (Sub-feature A [DB→API→UI] → Sub-feature B [DB→API→UI])
+   - **Rule**: Within slice, dependencies must be satisfied (Schema before Router, Router before UI)
+
+3. **Verifiable Checkpoints**:
+   - Each step must have **verification command** or **manual check**
+   - "How to know this step is correctly completed?"
+   - **Key**: Break complex flows until each step has **binary outcome** (pass/fail)
+
+4. **Green-to-Green**:
+   - Project should compile and run *after every step*
+   - Avoid "broken state" (step 1 breaks app, step 5 fixes it)
+
+5. **Context-Aware**:
+   - Must reference existing files
+   - Don't say "create utils.ts", say "update `src/utils/format.ts`"
+
+---
+
+## Output Template (Mandatory)
+
+### Standard Strategy (Rolling Wave + TDD)
+*Default strategy for 95% of tasks. Don't plan more than 1 phase at once*
 
 ```markdown
-# 🗓️ [模块名称] 实施计划
-> **策略**: 滚动波 + TDD
-> **当前阶段**: Phase 1（焦点）
-> **总估算工作量**: X 小时
-> **风险级别**: Low | Medium | High
+# 🗓️ [Module Name] Implementation Plan
+> **Strategy**: Rolling Wave + TDD
+> **Current Phase**: Phase 1 (Focus)
+> **Total Estimated Effort**: X hours
+> **Risk Level**: Low | Medium | High
 
-## 0. 设计引用与对齐
-> **关键**: 此计划实施 `specs/[module]/design.md` 中的设计
+## 0. Design Reference & Alignment
+> **Key**: This plan implements design in `specs/[module]/design.md`
 
-### 0.1 设计文档链接
+### 0.1 Design Document Links
 - **DESIGN**: `specs/[module]/design.md`
 - **REQUIREMENTS**: `specs/[module]/requirements.md`
-- **覆盖的用户故事**: US-001, US-002, ...
+- **Covered User Stories**: US-001, US-002, ...
 
-### 0.2 文件清单覆盖检查
-> 验证 DESIGN 第9节的所有文件都被此计划覆盖
+### 0.2 File Manifest Coverage Check
+> Verify all files from DESIGN Section 9 are covered by this plan
 
-| 文件（来自DESIGN） | 对应步骤 | 状态 |
+| File (from DESIGN) | Corresponding Step | Status |
 |------------------|---------|------|
-| `[path/to/EntityService.ext]` | 步骤 1.2 | ✅ |
+| `[path/to/EntityService.ext]` | Step 1.2 | ✅ |
 
-### 0.3 先决条件
-> 开始此计划前必须完成什么？
+### 0.3 Prerequisites
+> What must be completed before starting this plan?
 
-- **要安装的依赖**: `[package manager] add [packages]`
-- **环境变量**: 添加 `[VAR_NAME]` 到 `.env`
-- **设置命令**: `[setup command]`
-- **阻塞任务**: 无 / [链接到阻塞任务]
+- **Dependencies to Install**: `[package manager] add [packages]`
+- **Environment Variables**: Add `[VAR_NAME]` to `.env`
+- **Setup Commands**: `[setup command]`
+- **Blocking Tasks**: None / [Link to blocking task]
 
-## 1. 高级路线图（大图）
-- [ ] **Phase 1**: [名称，如核心API]（下方详述）
-- [ ] **Phase 2**: [名称，如前端集成]（待Phase 1完成）
-- [ ] **Phase 3**: [名称，如润色&边界情况]（未来）
+## 1. High-Level Roadmap (Big Picture)
+- [ ] **Phase 1**: [Name, like Core API] (detailed below)
+- [ ] **Phase 2**: [Name, like Frontend Integration] (pending Phase 1 complete)
+- [ ] **Phase 3**: [Name, like Polish & Edge Cases] (future)
 
-## 2. 详细执行计划: Phase 1
-> **上下文**: 只为这个阶段规划原子步骤
+## 2. Detailed Execution Plan: Phase 1
+> **Context**: Only plan atomic steps for this phase
 
-### 步骤 1.1: 设置&测试（Red）
-- [ ] **创建测试文件**
-  - **来源**: DESIGN 第7.1节（单元测试）
-  - **操作**: 创建 `[path/to/test/file.ext]`
-  - **内容**: 为 `[featureName]` 编写失败测试用例
-  - **验证**: 运行 `[test command] -- [test file]` → 预期失败（Red）
-  - **估算工作量**: 15分钟
-  - **风险**: 低
-  - **依赖于**: 无
-  - **回滚**: 删除测试文件
+### Step 1.1: Setup & Test (Red)
+- [ ] **Create test file**
+  - **Source**: DESIGN Section 7.1 (Unit Tests)
+  - **Action**: Create `[path/to/test/file.ext]`
+  - **Content**: Write failing test cases for `[featureName]`
+  - **Verify**: Run `[test command] -- [test file]` → Expect fail (Red)
+  - **Estimated Effort**: 15 minutes
+  - **Risk**: Low
+  - **Depends On**: None
+  - **Rollback**: Delete test file
 
-### 步骤 1.2: 实现（Green）
-- [ ] **实现逻辑**
-  - **来源**: DESIGN 第9.3节（类型定义）, 第9.4节（API签名）
-  - **操作**: 更新 `[path/to/source/file]` 实现逻辑
-  - **代码片段**（来自DESIGN）:
+### Step 1.2: Implementation (Green)
+- [ ] **Implement logic**
+  - **Source**: DESIGN Section 9.3 (Type Definitions), 9.4 (API Signatures)
+  - **Action**: Update `[path/to/source/file]` to implement logic
+  - **Code Snippet** (from DESIGN):
     ```[language]
-    // 从 DESIGN 第9.3节复制
+    // Copy from DESIGN Section 9.3
     ```
-  - **验证**: 运行 `[test command] -- [test file]` → 预期通过（Green）
-  - **估算工作量**: 30分钟
-  - **风险**: 低
-  - **依赖于**: 步骤 1.1
-  - **回滚**: `git checkout -- [path/to/source/file]`
+  - **Verify**: Run `[test command] -- [test file]` → Expect pass (Green)
+  - **Estimated Effort**: 30 minutes
+  - **Risk**: Low
+  - **Depends On**: Step 1.1
+  - **Rollback**: `git checkout -- [path/to/source/file]`
 
-### 步骤 1.3: 数据库Schema更新
-- [ ] **更新Schema**
-  - **来源**: DESIGN 第3节（数据模型）
-  - **操作**: 更新 `[path/to/schema]` 添加模型
-  - **代码片段**（来自DESIGN）:
+### Step 1.3: Database Schema Update
+- [ ] **Update Schema**
+  - **Source**: DESIGN Section 3 (Data Model)
+  - **Action**: Update `[path/to/schema]` to add model
+  - **Code Snippet** (from DESIGN):
     ```[language]
-    // 从 DESIGN 第3节复制
+    // Copy from DESIGN Section 3
     ```
-  - **验证**: 运行 `[schema validation command]` → 预期成功
-  - **后续操作**: 运行 `[migration command]`
-  - **估算工作量**: 20分钟
-  - **风险**: 中（DB变更）
-  - **依赖于**: 无（可与步骤1.1并行）
-  - **回滚**: `[rollback migration command]` 或手动回滚
+  - **Verify**: Run `[schema validation command]` → Expect success
+  - **Follow-up**: Run `[migration command]`
+  - **Estimated Effort**: 20 minutes
+  - **Risk**: Medium (DB change)
+  - **Depends On**: None (can parallel with Step 1.1)
+  - **Rollback**: `[rollback migration command]` or manual rollback
 
 ---
 
-### 🚩 里程碑1: 核心基础完成
-> 步骤1.1-1.3后，验证:
-- [ ] 测试存在并适当失败
-- [ ] Schema有效
-- [ ] `[build command]` 通过
+### 🚩 Milestone 1: Core Foundation Complete
+> After steps 1.1-1.3, verify:
+- [ ] Tests exist and fail appropriately
+- [ ] Schema valid
+- [ ] `[build command]` passes
 ```
 
 ---
 
-## 工作流程
+## Workflow
 
-1. **摄取上下文**: 读取 `prework.md`, `requirements.md`, `design.md`
-2. **文件清单检查**: 将 DESIGN 第9节的文件清单复制到第0.2节
-3. **依赖图**: 映射什么需要在什么之前存在
-4. **起草**: 使用模板编写步骤
-5. **来源链接**: 每步添加 `Source` 字段指向 DESIGN 节
-6. **代码片段复制**: 复杂步骤从 DESIGN 复制代码片段
-7. **里程碑插入**: 每3-5步添加里程碑检查点
-8. **改进**:
-   - 有步骤太大吗？拆分它们
-   - 文件名精确吗？检查现有文件树
-   - 验证清晰可执行吗？
-   - 每步都有回滚吗？
+1. **Ingest Context**: Read `prework.md`, `requirements.md`, `design.md`
+2. **File Manifest Check**: Copy file manifest from DESIGN Section 9 to Section 0.2
+3. **Dependency Graph**: Map what needs to exist before what
+4. **Draft**: Write steps using template
+5. **Source Linking**: Add `Source` field for each step pointing to DESIGN section
+6. **Code Snippet Copy**: For complex steps, copy code snippets from DESIGN
+7. **Milestone Insertion**: Add milestone checkpoints every 3-5 steps
+8. **Refinement**:
+   - Are any steps too large? Split them
+   - Are filenames precise? Check against existing file tree
+   - Are verifications clear and executable?
+   - Does every step have rollback?
 
 ---
 
-## 步骤字段参考
+## Step Field Reference
 
-| 字段 | 必需 | 描述 |
+| Field | Required | Description |
 |------|------|------|
-| **来源** | ✅ | 此步骤实施哪个 DESIGN 节 |
-| **操作** | ✅ | 做什么（创建/更新/删除文件）|
-| **代码片段** | ⚠️ | 复杂步骤从 DESIGN 复制 |
-| **验证** | ✅ | 验证成功的精确命令 |
-| **估算工作量** | ✅ | 时间估算（15分钟，30分钟，1小时等）|
-| **风险** | ✅ | 低 / 中 / 高 |
-| **依赖于** | ✅ | 哪些步骤必须先完成 |
-| **回滚** | ✅ | 如果此步骤失败如何撤销 |
+| **Source** | ✅ | Which DESIGN section does this step implement |
+| **Action** | ✅ | What to do (create/update/delete file)|
+| **Code Snippet** | ⚠️ | Copy from DESIGN for complex steps |
+| **Verify** | ✅ | Precise command to verify success |
+| **Estimated Effort** | ✅ | Time estimate (15min, 30min, 1hr etc)|
+| **Risk** | ✅ | Low / Medium / High |
+| **Depends On** | ✅ | Which steps must complete first |
+| **Rollback** | ✅ | How to undo if this step fails |
 
 ---
 
-## QA 检查清单（嵌入）
+## QA Checklist (Embedded)
 
-### 🛡️ PLAN QA：飞前检查
+### 🛡️ PLAN QA: Pre-Flight Check
 
-**角色**: 你是**"技术负责人"**和**"DevOps守门员"**。防止**"破坏构建"**和**"上下文幻觉"**。你是触碰代码前的最后防线。
+**Role**: You are **"Tech Lead"** and **"DevOps Gatekeeper"**. Prevent **"breaking the build"** and **"context hallucination"**. You are the last defense before touching code.
 
-**关键原则**: PLAN应该执行，不是决策。如果计划做架构决策，拒绝它回到 DESIGN。
+**Key Principle**: PLAN should execute, not decide. If plan makes architecture decisions, reject it back to DESIGN.
 
-#### SAFE-RUN-D 模型
+#### SAFE-RUN-D Model
 
-#### 0. **S**tructure 结构合规（强制首检）🔴 关键
-- [ ] 第0节: 设计引用与对齐
-- [ ] 第0.1节: 设计文档链接
-- [ ] 第0.2节: 文件清单覆盖检查
-- [ ] 第0.3节: 先决条件
-- [ ] 第1节: 高级路线图
-- [ ] 第2节: 详细执行计划（仅Phase 1）
-- [ ] 第3节: 回滚计划
-- [ ] 第4节: 关键检查点
+#### 0. **S**tructure Compliance (Mandatory First Check) 🔴 Critical
+- [ ] Section 0: Design Reference & Alignment
+- [ ] Section 0.1: Design Document Links
+- [ ] Section 0.2: File Manifest Coverage Check
+- [ ] Section 0.3: Prerequisites
+- [ ] Section 1: High-Level Roadmap
+- [ ] Section 2: Detailed Execution Plan (Phase 1 only)
+- [ ] Section 3: Rollback Plan
+- [ ] Section 4: Key Checkpoints
 
-#### 1. **D**esign 设计对齐（可追溯性检查）🔴 关键
-- [ ] **文件清单覆盖**: 第0.2节列出 DESIGN 第9节的所有文件？
-- [ ] **无新文件**: PLAN引入了 DESIGN 中没有的文件？
-- [ ] **来源可追溯性**: 每步都有链接到 DESIGN 的 `Source` 字段？
-- [ ] **无架构决策**: PLAN做了属于 DESIGN 的决策？
+#### 1. **D**esign Alignment (Traceability Check) 🔴 Critical
+- [ ] **File Manifest Coverage**: Section 0.2 lists all files from DESIGN Section 9?
+- [ ] **No New Files**: Does PLAN introduce files not in DESIGN?
+- [ ] **Source Traceability**: Every step has `Source` field linking to DESIGN?
+- [ ] **No Architecture Decisions**: Does PLAN make decisions that belong in DESIGN?
 
-#### 2. **S**equence 序列逻辑（依赖检查）
-- [ ] **依赖顺序**: 基础（Schema/DB）在依赖者（API）前构建，依赖者在消费者（UI）前？
-- [ ] **依赖于字段**: 每步都有 `依赖于` 字段？
-- [ ] **先决条件检查**: 第0.3节列出所有需要安装的新包？
+#### 2. **S**equence Logic (Dependency Check)
+- [ ] **Dependency Order**: Foundation (Schema/DB) built before dependents (API), dependents before consumers (UI)?
+- [ ] **Depends On Field**: Every step has `Depends On` field?
+- [ ] **Prerequisites Check**: Section 0.3 lists all new packages to install?
 
-#### 3. **A**tomicity 原子性&复杂度（认知负荷检查）
-- [ ] **滚动波检查**: 详细计划限制在Phase 1？
-- [ ] **TDD强制**: Phase 1以测试创建步骤开始？
-- [ ] **里程碑存在**: 每3-5步有里程碑检查点？
+#### 3. **A**tomicity & Complexity (Cognitive Load Check)
+- [ ] **Rolling Wave Check**: Detailed plan limited to Phase 1?
+- [ ] **TDD Enforcement**: Phase 1 starts with test creation step?
+- [ ] **Milestones Exist**: Milestone checkpoint every 3-5 steps?
 
-#### 4. **F**ile 文件现实&上下文（幻觉检查）
-- [ ] **路径验证**: "编辑"步骤中提到的文件实际存在？
-- [ ] **命名约定**: 新文件名遵循项目规则？
-- [ ] **代码片段存在**: 复杂步骤有来自 DESIGN 的代码片段？
+#### 4. **F**ile Reality & Context (Hallucination Check)
+- [ ] **Path Verification**: Files mentioned in "edit" steps actually exist?
+- [ ] **Naming Conventions**: New file names follow project conventions?
+- [ ] **Code Snippets Exist**: Complex steps have code snippets from DESIGN?
 
-#### 5. **E**xecutability 可执行性（绿到绿）
-- [ ] **编译安全**: 项目在*每步后*编译？
-- [ ] **迁移安全**: 计划包括schema变更后的DB迁移命令？
-- [ ] **回滚字段**: 每步都有 `回滚` 字段？
+#### 5. **E**xecutability (Green-to-Green)
+- [ ] **Compile Safety**: Project compiles *after each step*?
+- [ ] **Migration Safety**: Plan includes DB migration command after schema changes?
+- [ ] **Rollback Field**: Every step has `Rollback` field?
 
-#### 6. **R**un 运行&验证（可测试性）
-- [ ] **明确验证**: 每步都有具体命令验证成功？
-- [ ] **集成风险**: （切片2+）此切片会破坏切片1吗？
-- [ ] **工作量估算**: 每步都有 `估算工作量` 字段？
+#### 6. **R**un & Verification (Testability)
+- [ ] **Explicit Verification**: Every step has concrete command to verify success?
+- [ ] **Integration Risk**: (Slice 2+) Will this slice break Slice 1?
+- [ ] **Effort Estimates**: Every step has `Estimated Effort` field?
 
-#### 7. **U**nambiguous 明确步骤（清晰度检查）
-- [ ] **无模糊操作**: 所有操作具体明确？
-- [ ] **无缺失细节**: 初级开发人员可以执行此步骤而不问问题？
+#### 7. **U**nambiguous Steps (Clarity Check)
+- [ ] **No Vague Actions**: All actions specific and explicit?
+- [ ] **No Missing Details**: Can junior developer execute this step without asking questions?
 
 ---
 
-### 输出格式: 审查报告
+### Output Format: Review Report
 
 ```markdown
-# 🛡️ 计划审查报告
-> 目标: [计划名称]
-> 审查员: DevOps守门员
-> 判决: 🔴 拒绝 | 🟡 需要修改 | 🟢 批准
+# 🛡️ Plan Review Report
+> Target: [Plan name]
+> Reviewer: DevOps Gatekeeper
+> Verdict: 🔴 Rejected | 🟡 Needs Revision | 🟢 Approved
 
-## 0. 结构合规
-[列出所有节检查状态]
+## 0. Structural Compliance
+[List all section check statuses]
 
-## 1. 设计对齐检查
-| 文件（来自DESIGN） | 对应步骤 | 状态 |
+## 1. Design Alignment Check
+| File (from DESIGN) | Corresponding Step | Status |
 |------------------|---------|------|
-| `src/features/scene/SceneService.ts` | 步骤 1.2 | ✅ |
-| `src/features/scene/types.ts` | - | ❌ 缺失 |
+| `src/features/scene/SceneService.ts` | Step 1.2 | ✅ |
+| `src/features/scene/types.ts` | - | ❌ Missing |
 
-**问题**:
-- [Alignment] DESIGN 的 `src/features/scene/types.ts` 未被任何步骤覆盖
+**Issues**:
+- [Alignment] DESIGN's `src/features/scene/types.ts` not covered by any step
 
-## 2. 关键阻塞（必须修复）
-- [Reality] **步骤 2.1**: 要求编辑 `server/api/routers/users.ts`，但该文件不存在
+## 2. Critical Blockers (Must Fix)
+- [Reality] **Step 2.1**: Requires editing `server/api/routers/users.ts`, but this file doesn't exist
 
-## 3. 步骤字段审计
-| 步骤 | 来源 | 验证 | 回滚 | 依赖于 | 状态 |
+## 3. Step Field Audit
+| Step | Source | Verify | Rollback | Depends On | Status |
 |------|------|------|------|--------|------|
 | 1.1 | ✅ | ✅ | ✅ | ✅ | OK |
-| 1.2 | ✅ | ✅ | ❌ | ✅ | 缺失回滚 |
+| 1.2 | ✅ | ✅ | ❌ | ✅ | Missing rollback |
 
-## 4. 风险&优化
-- [Slicing] 计划有15步，太长且风险大
-- [Milestone] 未定义里程碑
+## 4. Risks & Optimizations
+- [Slicing] Plan has 15 steps, too long and risky
+- [Milestone] No milestones defined
 
-## 5. 判决
-- **拒绝**: 第0.2节不完整（缺少文件覆盖）
+## 5. Verdict
+- **Rejected**: Section 0.2 incomplete (missing file coverage)
 ```
 
-### 交互协议
-1. **结构优先**: 先检查第0节
-2. **设计对齐**: 验证第0.2节覆盖 DESIGN 第9节的所有文件
-3. **文件验证**: 交叉引用文件路径与实际文件系统
-4. **步骤字段审计**: 检查每步有：来源、验证、回滚、依赖于
-5. **如果批准**: 你认证计划"可安全执行"且与 DESIGN 对齐
-
+### Interaction Protocol
+1. **Structure First**: Check Section 0 first
+2. **Design Alignment**: Verify Section 0.2 covers all files from DESIGN Section 9
+3. **File Verification**: Cross-reference file paths with actual filesystem
+4. **Step Field Audit**: Check every step has: source, verify, rollback, depends on
+5. **If Approved**: You certify plan is "safe to execute" and aligned with DESIGN

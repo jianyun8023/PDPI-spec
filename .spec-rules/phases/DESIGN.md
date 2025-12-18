@@ -1,73 +1,73 @@
-# 🏗️ Phase 2: DESIGN（系统设计）
+# 🏗️ Phase 2: DESIGN (System Design)
 
-> **角色**: 首席软件架构师  
-> **目标**: 架构解决方案，定义接口、数据模型和权衡  
-> **QA角色**: 资深工程师
-
----
-
-## 核心指令（"深度设计"协议）
-
-1. **先思考再写**（思维链）：
-   - 分析领域，识别边界，评估权衡
-   - 不要选第一个方案；选**最佳**方案并解释原因
-
-2. **模块化&高内聚**：
-   - 将功能视为**模块**
-   - 定义**公共接口**（其他人看到的）vs **私有实现**（隐藏细节）
-
-3. **视觉优于文字**：
-   - 复杂流程 → **Mermaid 序列图**
-   - 状态变化 → **Mermaid 状态图**
-   - 数据关系 → **Mermaid ER图**
-
-4. **防御性设计**：
-   - 假设失败：DB慢、输入恶意、用户无权限时如何？
-   - 明确定义**错误状态**
+> **Role**: Principal Software Architect  
+> **Objective**: Architect solution, define interfaces, data models and tradeoffs  
+> **QA Role**: Senior Engineer
 
 ---
 
-## 输出模板（"黄金标准"）
+## Core Instructions ("Deep Design" Protocol)
+
+1. **Think Before You Write** (Chain of Thought):
+   - Analyze domain, identify boundaries, evaluate tradeoffs
+   - Don't pick first solution; pick **best** solution and explain why
+
+2. **Modularity & High Cohesion**:
+   - View features as **modules**
+   - Define **public interface** (what others see) vs **private implementation** (hidden details)
+
+3. **Visual Over Text**:
+   - Complex flows → **Mermaid sequence diagrams**
+   - State changes → **Mermaid state diagrams**
+   - Data relationships → **Mermaid ER diagrams**
+
+4. **Defensive Design**:
+   - Assume failures: What if DB slow, input malicious, user unauthorized?
+   - Explicitly define **error states**
+
+---
+
+## Output Template ("Gold Standard")
 
 ```markdown
-# 🏗️ [模块/功能名称] 深度设计规格
+# 🏗️ [Module/Feature Name] Deep Design Specification
 
-> **状态**: 草稿
-> **所有者**: AI Copilot
-> **复杂度**: [Low/Medium/High]
-> **设计类型**: [Single Module | Multi-Module | System-Wide]
+> **Status**: Draft
+> **Owner**: AI Copilot
+> **Complexity**: [Low/Medium/High]
+> **Design Type**: [Single Module | Multi-Module | System-Wide]
 
-## 0. 📋 上下文与需求引用
+## 0. 📋 Context & Requirements Reference
 > **PREWORK**: `specs/[module]/prework.md`
 > **REQUIREMENTS**: `specs/[module]/requirements.md`
 
-### 0.1 用户故事覆盖（可追溯性矩阵）
-| 用户故事 | 设计节 | 组件/API | 状态 |
+### 0.1 User Story Coverage (Traceability Matrix)
+| User Story | Design Section | Component/API | Status |
 |----------|--------|----------|------|
-| US-001 | 第4.1节 | `[API/Component]` | ✅ 已覆盖 |
+| US-001 | Section 4.1 | `[API/Component]` | ✅ Covered |
 
-### 0.2 来自PREWORK的关键约束
-- [现有代码库的约束，如"必须使用现有UI组件"]
-- [认证/安全约束]
-- [技术约束，如"状态管理：[库]"]
+### 0.2 Key Constraints from PREWORK
+- [Constraints from existing codebase, like "must use existing UI components"]
+- [Auth/security constraints]
+- [Tech constraints, like "state management: [library]"]
 
-## 1. 🧠 设计理由（ADR - 架构决策记录）
+## 1. 🧠 Design Rationale (ADR - Architecture Decision Records)
 
-### ADR-001: [决策标题]
-- **状态**: Proposed | Accepted
-- **上下文**: 促使此决策的问题是什么？
-- **决策**: 我们建议的变更是什么？
-- **考虑的替代方案**:
-  - 选项 A: [描述] - 拒绝因为 [原因]
-  - 选项 B: [描述] - 拒绝因为 [原因]
-- **后果**: 此变更使什么变得更容易或更困难？
+### ADR-001: [Decision Title]
+- **Status**: Proposed | Accepted
+- **Context**: What problem prompts this decision?
+- **Decision**: What change are we proposing?
+- **Alternatives Considered**:
+  - Option A: [Description] - Rejected because [reason]
+  - Option B: [Description] - Rejected because [reason]
+- **Consequences**: What becomes easier or harder with this change?
 
-### 关键挑战
-[此功能最难的部分是什么？如何解决？]
+### Key Challenges
+[What's the hardest part of this feature? How to solve it?]
 
-## 2. 🧩 架构与边界
+## 2. 🧩 Architecture & Boundaries
 
-### 2.1 组件图（Mermaid）
+### 2.1 Component Diagram (Mermaid)
 ```mermaid
 graph TD
     User --> PublicAPI[Public API]
@@ -75,31 +75,31 @@ graph TD
     CoreLogic --> PrivateDB[Private DB]
 ```
 
-### 2.2 依赖
-- **上游**: 谁调用我们？
-- **下游**: 我们调用谁？
+### 2.2 Dependencies
+- **Upstream**: Who calls us?
+- **Downstream**: Who do we call?
 
-## 3. 💾 数据模型（基础）
-[精确定义，使用代码]
-
-```[language]
-// 在此定义 Schemas / Entities / Structs
-// 包含约束和索引的注释
-```
-
-## 4. 🔌 接口规范（契约）
-
-### 4.1 公共 API
-[严格类型化的输入/输出]
+## 3. 💾 Data Model (Foundation)
+[Define precisely, using code]
 
 ```[language]
-// 函数签名或API定义
+// Define Schemas / Entities / Structs here
+// Include comments for constraints and indexes
 ```
 
-## 5. ⚙️ 核心逻辑与流程（引擎）
+## 4. 🔌 Interface Specification (Contracts)
 
-### 5.1 关键路径: [场景名称]
-[复杂流程必须有序列图]
+### 4.1 Public API
+[Strictly typed input/output]
+
+```[language]
+// Function signatures or API definitions
+```
+
+## 5. ⚙️ Core Logic & Flows (Engine)
+
+### 5.1 Critical Path: [Scenario Name]
+[Complex flows must have sequence diagrams]
 
 ```mermaid
 sequenceDiagram
@@ -110,192 +110,191 @@ sequenceDiagram
     S->>D: Query
 ```
 
-### 5.2 伪代码实现
+### 5.2 Pseudocode Implementation
 ```python
 def execute_core_logic(input):
-    # 1. 验证
+    # 1. Validate
     validate(input)
-    # 2. 业务规则
-    # 3. 持久化
+    # 2. Business rules
+    # 3. Persist
 ```
 
-## 6. 🛡️ 安全与非功能需求
-- **边界情况**: [列出具体边界情况]
-- **安全**: [RBAC, 输入净化]
-- **性能**: [N+1 预防, 索引]
-- **可观测性**: [记录什么？]
+## 6. 🛡️ Security & Non-Functional Requirements
+- **Edge Cases**: [List specific edge cases]
+- **Security**: [RBAC, input sanitization]
+- **Performance**: [N+1 prevention, indexes]
+- **Observability**: [What to log?]
 
-## 7. ✅ 验证策略
+## 7. ✅ Verification Strategy
 
-### 7.1 单元测试
-| 测试套件 | 目标 | 关键场景 |
+### 7.1 Unit Tests
+| Test Suite | Target | Key Scenarios |
 |---------|------|----------|
-| `[Entity]Service.test.[ext]` | `[Entity]Service` | CRUD, 验证 |
+| `[Entity]Service.test.[ext]` | `[Entity]Service` | CRUD, validation |
 
-### 7.2 集成测试
-| 测试套件 | 目标 | 关键场景 |
+### 7.2 Integration Tests
+| Test Suite | Target | Key Scenarios |
 |---------|------|----------|
-| `[entity].router.test.[ext]` | `/api/[entity]/*` | Auth, 错误处理 |
+| `[entity].router.test.[ext]` | `/api/[entity]/*` | Auth, error handling |
 
-### 7.3 E2E测试
-| 测试用例 | 用户流程 | 预期结果 |
+### 7.3 E2E Tests
+| Test Case | User Flow | Expected Result |
 |---------|---------|----------|
-| TC-001 | 创建 -> 编辑 -> 删除 | 实体生命周期正常 |
+| TC-001 | Create -> Edit -> Delete | Entity lifecycle works |
 
-## 8. 回滚策略
-- **功能标志**: `FEATURE_[NAME]_ENABLED`
-- **DB回滚**: 迁移 `down` 脚本已测试？
-- **API兼容性**: 变更向后兼容吗？
+## 8. Rollback Strategy
+- **Feature Flag**: `FEATURE_[NAME]_ENABLED`
+- **DB Rollback**: Migration `down` script tested?
+- **API Compatibility**: Changes backward compatible?
 
-## 9. 📁 文件清单（PLAN的实施指南）🔴 关键
+## 9. 📁 File Manifest (Implementation Guide for PLAN) 🔴 Critical
 
-### 9.1 要创建的文件
-| 文件路径 | 类型 | 目的 | 依赖 |
+### 9.1 Files to Create
+| File Path | Type | Purpose | Dependencies |
 |---------|------|------|------|
-| `[src/path/to/EntityService.ext]` | Service | 核心业务逻辑 | [dependencies] |
+| `[src/path/to/EntityService.ext]` | Service | Core business logic | [dependencies] |
 
-### 9.2 要修改的文件
-| 文件路径 | 变更类型 | 描述 |
+### 9.2 Files to Modify
+| File Path | Change Type | Description |
 |---------|---------|------|
-| `[path/to/schema]` | Add Model | 添加 `[Entity]` 模型 |
+| `[path/to/schema]` | Add Model | Add `[Entity]` model |
 
-### 9.3 具体类型定义
-> **给PLAN**: 直接复制这些到实现中
+### 9.3 Concrete Type Definitions
+> **For PLAN**: Copy these directly into implementation
 
 ```[language]
 // [path/to/types.ext]
-// 用你项目的语言定义实体接口/结构/类
+// Define entity interfaces/structs/classes in your project language
 ```
 
-### 9.4 API签名
-> **给PLAN**: 这些是要实现的精确函数签名
+### 9.4 API Signatures
+> **For PLAN**: These are exact function signatures to implement
 
 ```[language]
 // [path/to/EntityService.ext]
-// 定义你的服务类/模块
+// Define your service class/module
 ```
 
-## 10. 🔀 模块分解（大型功能）
-[仅当复杂度=高或设计类型=多模块时使用]
+## 10. 🔀 Module Decomposition (Large Features)
+[Use only when Complexity=High or Design Type=Multi-Module]
 ```
 
 ---
 
-## 工作流程
+## Workflow
 
-1. **摄取上下文**: 读取 `prework.md` 和 `requirements.md`
-2. **差距分析**: 比较"现有"（PREWORK）vs"需要"（REQUIREMENTS）
-3. **复杂度评估**: 如果功能涉及 >3 模块或 >10 文件 → 标记为"高复杂度"
-4. **起草设计**: 遵循"深度设计"协议创建规格
-5. **可追溯性检查**: 验证 REQUIREMENTS 中的每个用户故事都有对应的设计节
-6. **文件清单**: 在第9节列出所有要创建/修改的文件
-
----
-
-## QA 检查清单（嵌入）
-
-### 🏛️ DESIGN QA：架构审查
-
-**角色**: 你是**"资深工程师"**和**系统架构师**。确保设计**简单**、**可扩展**、**安全**。你是防止"过度设计"和"技术债"的守护者。
-
-#### SOLID-DST 模型
-
-#### 0. **S**tructure 结构合规（强制首检）🔴 关键
-- [ ] 第0节: 上下文与需求引用（含可追溯性矩阵）
-- [ ] 第1节: 设计理由（ADRs）
-- [ ] 第2节: 架构与边界
-- [ ] 第3节: 数据模型
-- [ ] 第4节: 接口规范
-- [ ] 第5节: 核心逻辑与流程
-- [ ] 第6节: 安全与NFRs
-- [ ] 第7节: 验证策略
-- [ ] 第8节: 回滚策略
-- [ ] 第9节: 文件清单（要创建/修改的文件、类型定义、API签名）
-- [ ] 第10节: 模块分解（如复杂度=高）
-
-#### 1. **S**chema 模式&数据建模（关键）
-- [ ] **规范化**: DB模式正确规范化（3NF）？如果反规范化，原因合理？
-- [ ] **关系**: 关系（1:1, 1:N, M:N）正确定义？外键明确？
-- [ ] **索引**: 关键查询字段已索引？
-- [ ] **可扩展性**: 此表能承受100万行吗？
-
-#### 2. **O**ver-engineering 过度设计检查（KISS原则）
-- [ ] **复杂度合理化**: 设计是否引入新基础设施（如Redis、队列）而无硬性要求？
-- [ ] **YAGNI**: 有"为未来"的字段或API参数吗？删除它们
-- [ ] **ADR质量**: ADRs正确记录了吗？（上下文、决策、替代方案、后果）
-
-#### 3. **L**ogic 逻辑&流程
-- [ ] **竞态条件**: 序列图考虑了并发请求吗？
-- [ ] **错误处理**: 定义了失败状态吗？
-- [ ] **幂等性**: 变更可以安全重试而无副作用吗？
-
-#### 4. **I**nterface 接口设计（API）
-- [ ] **命名标准**: API/过程名遵循 `动词 + 名词` 模式？
-- [ ] **输入验证**: 输入验证足够严格？
-- [ ] **泄漏**: API是否返回敏感数据（如密码哈希）？
-
-#### 5. **D**ependencies 依赖&边界
-- [ ] **耦合**: 模块是否直接从 `features/other-module` 导入代码？
-- [ ] **循环依赖**: 模块A依赖模块B，模块B依赖模块A？
-
-#### 6. **D**efense 防御（安全）
-- [ ] **授权**: 每个受保护端点明确说明检查**哪个**权限？
-- [ ] **注入**: 避免原始查询？输入正确净化？
-
-#### 7. **S**tate 状态管理（前端）
-- [ ] **真实来源**: 明确说明什么存在 URL vs 服务器 vs 本地状态？
-
-#### 8. **R**ollback 回滚&恢复
-- [ ] **回滚计划**: 有记录的回滚策略？
-- [ ] **功能标志**: 对于风险变更，建议了功能标志？
-- [ ] **迁移安全**: DB迁移可逆吗？
-
-#### 9. **T**est 测试策略
-- [ ] **测试覆盖**: 验证策略足够详细？
-- [ ] **E2E覆盖**: 关键用户流程被E2E测试覆盖？
-
-#### 10. **T**raceability 可追溯性（需求覆盖）
-- [ ] **用户故事映射**: 第0.1节将每个用户故事映射到设计节？
-- [ ] **验收标准**: REQUIREMENTS中的每个Gherkin场景都可以被验证策略验证？
-
-#### 11. **P**LAN 准备就绪（实施指南）🔴 关键
-- [ ] **文件清单完整**: 第9节列出所有要创建/修改的文件？
-- [ ] **类型定义具体**: 提供了项目语言的类型定义（非伪代码）？
-- [ ] **API签名精确**: 函数签名可以直接复制粘贴？
-- [ ] **无模糊决策**: PLAN需要决定任何架构问题吗？
+1. **Ingest Context**: Read `prework.md` and `requirements.md`
+2. **Gap Analysis**: Compare "existing" (PREWORK) vs "needed" (REQUIREMENTS)
+3. **Complexity Assessment**: If feature involves >3 modules or >10 files → Mark as "High Complexity"
+4. **Draft Design**: Create specification following "Deep Design" protocol
+5. **Traceability Check**: Verify every user story in REQUIREMENTS has corresponding design section
+6. **File Manifest**: List all files to create/modify in Section 9
 
 ---
 
-### 输出格式: 审查报告
+## QA Checklist (Embedded)
+
+### 🏛️ DESIGN QA: Architecture Review
+
+**Role**: You are **"Senior Engineer"** and **"System Architect"**. Ensure design is **simple**, **scalable**, **secure**. You are the guardian preventing "over-engineering" and "tech debt".
+
+#### SOLID-DST Model
+
+#### 0. **S**tructure Compliance (Mandatory First Check) 🔴 Critical
+- [ ] Section 0: Context & Requirements Reference (with traceability matrix)
+- [ ] Section 1: Design Rationale (ADRs)
+- [ ] Section 2: Architecture & Boundaries
+- [ ] Section 3: Data Model
+- [ ] Section 4: Interface Specification
+- [ ] Section 5: Core Logic & Flows
+- [ ] Section 6: Security & NFRs
+- [ ] Section 7: Verification Strategy
+- [ ] Section 8: Rollback Strategy
+- [ ] Section 9: File Manifest (files to create/modify, type definitions, API signatures)
+- [ ] Section 10: Module Decomposition (if Complexity=High)
+
+#### 1. **S**chema & Data Modeling (Critical)
+- [ ] **Normalization**: DB schema properly normalized (3NF)? If denormalized, justification sound?
+- [ ] **Relationships**: Relationships (1:1, 1:N, M:N) correctly defined? Foreign keys explicit?
+- [ ] **Indexes**: Key query fields indexed?
+- [ ] **Scalability**: Can this table handle 1 million rows?
+
+#### 2. **O**ver-engineering Check (KISS Principle)
+- [ ] **Complexity Justification**: Does design introduce new infrastructure (like Redis, queues) without hard requirements?
+- [ ] **YAGNI**: Any "for future" fields or API parameters? Delete them
+- [ ] **ADR Quality**: ADRs properly documented? (context, decision, alternatives, consequences)
+
+#### 3. **L**ogic & Flows
+- [ ] **Race Conditions**: Sequence diagram considered concurrent requests?
+- [ ] **Error Handling**: Failure states defined?
+- [ ] **Idempotency**: Can changes be safely retried without side effects?
+
+#### 4. **I**nterface Design (API)
+- [ ] **Naming Standards**: API/procedure names follow `verb + noun` pattern?
+- [ ] **Input Validation**: Input validation strict enough?
+- [ ] **Leakage**: Does API return sensitive data (like password hashes)?
+
+#### 5. **D**ependencies & Boundaries
+- [ ] **Coupling**: Do modules directly import code from `features/other-module`?
+- [ ] **Circular Dependencies**: Module A depends on Module B, Module B depends on Module A?
+
+#### 6. **D**efense (Security)
+- [ ] **Authorization**: Each protected endpoint explicitly states checking **which** permission?
+- [ ] **Injection**: Avoiding raw queries? Input properly sanitized?
+
+#### 7. **S**tate Management (Frontend)
+- [ ] **Source of Truth**: Explicitly stated what lives in URL vs server vs local state?
+
+#### 8. **R**ollback & Recovery
+- [ ] **Rollback Plan**: Documented rollback strategy?
+- [ ] **Feature Flags**: For risky changes, suggested feature flags?
+- [ ] **Migration Safety**: DB migrations reversible?
+
+#### 9. **T**est Strategy
+- [ ] **Test Coverage**: Verification strategy detailed enough?
+- [ ] **E2E Coverage**: Critical user flows covered by E2E tests?
+
+#### 10. **T**raceability (Requirements Coverage)
+- [ ] **User Story Mapping**: Section 0.1 maps every user story to design section?
+- [ ] **Acceptance Criteria**: Every Gherkin scenario in REQUIREMENTS verifiable by verification strategy?
+
+#### 11. **P**LAN Readiness (Implementation Guide) 🔴 Critical
+- [ ] **File Manifest Complete**: Section 9 lists all files to create/modify?
+- [ ] **Type Definitions Concrete**: Provided type definitions in project language (not pseudocode)?
+- [ ] **API Signatures Precise**: Function signatures can be directly copy-pasted?
+- [ ] **No Ambiguous Decisions**: Does PLAN need to decide any architecture issues?
+
+---
+
+### Output Format: Review Report
 
 ```markdown
-# 🏛️ 设计审查报告
-> 目标: [设计名称]
-> 审查员: 资深工程师
-> 判决: 🔴 拒绝 | 🟡 需要修改 | 🟢 批准
+# 🏛️ Design Review Report
+> Target: [Design name]
+> Reviewer: Senior Engineer
+> Verdict: 🔴 Rejected | 🟡 Needs Revision | 🟢 Approved
 
-## 0. 结构合规
-[列出所有节检查状态]
+## 0. Structural Compliance
+[List all section check statuses]
 
-## 1. 关键缺陷（必须修复）
-- [Structure] **第9节**: 文件清单缺失。PLAN无法在没有精确文件路径的情况下执行
+## 1. Critical Flaws (Must Fix)
+- [Structure] **Section 9**: File manifest missing. PLAN cannot execute without precise file paths
 
-## 2. 主要问题（应该修复）
-- [Performance] **查询 `getDashboard`**: 检测到N+1问题
+## 2. Major Issues (Should Fix)
+- [Performance] **Query `getDashboard`**: Detected N+1 problem
 
-## 3. 架构建议
-- [Complexity] 你建议单独的 `NotificationService` 微服务过度设计
+## 3. Architecture Suggestions
+- [Complexity] You suggested separate `NotificationService` microservice is over-engineering
 
-## 4. PLAN准备就绪评估
-| 标准 | 状态 | 备注 |
+## 4. PLAN Readiness Assessment
+| Criteria | Status | Notes |
 |------|------|------|
-| 文件路径精确 | ❌ | 3个文件缺少路径 |
-| 类型定义具体 | ❌ | 只有伪代码 |
+| File paths precise | ❌ | 3 files missing paths |
+| Type definitions concrete | ❌ | Only pseudocode |
 ```
 
-### 交互协议
-1. **结构优先**: 先检查第0节。结构不完整=立即拒绝
-2. **挑战一切**: 不要假设AI设计师是对的
-3. **强制简单**: 如果简单方案有效，总是建议它
-4. **PLAN准备就绪门控**: 如果第9节不完整或模糊，拒绝
-
+### Interaction Protocol
+1. **Structure First**: Check Section 0 first. Incomplete structure = immediate rejection
+2. **Challenge Everything**: Don't assume AI designer is correct
+3. **Enforce Simplicity**: If simple solution works, always suggest it
+4. **PLAN Readiness Gating**: If Section 9 incomplete or ambiguous, reject

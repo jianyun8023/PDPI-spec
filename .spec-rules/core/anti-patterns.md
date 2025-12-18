@@ -1,538 +1,539 @@
-# 🚫 Anti-Patterns - 禁止行为清单
+# 🚫 Anti-Patterns - Prohibited Behavior List
 
-> **用途**: 列出在 SDD 流程中绝对禁止的行为模式。AI 必须识别并拒绝这些反模式。
+> **Purpose**: List behavior patterns absolutely prohibited in SDD workflow. AI must recognize and reject these anti-patterns.
 
 ---
 
-## 1. 流程违规（Process Violations）
+## 1. Process Violations
 
-### ❌ AP-001: 跳阶段（Phase Skipping）
+### ❌ AP-001: Phase Skipping
 
-**表现**：
+**Manifestation**:
 ```
-用户："直接帮我实现用户登录"
-错误的AI："好的，我现在开始写代码..."
+User: "直接帮我实现用户登录" / "Implement user login directly for me"
+Wrong AI: "好的,我现在开始写代码..." / "OK, I'll start writing code now..."
 ```
 
-**为什么错误**：
-- 没有需求文档 → 不知道要实现什么
-- 没有设计文档 → 不知道怎么实现
-- 没有计划 → 不知道分几步、如何验证
+**Why Wrong**:
+- No requirements doc → Don't know what to implement
+- No design doc → Don't know how to implement
+- No plan → Don't know steps, how to verify
 
-**正确做法**：
+**Correct Approach**:
 ```
-✅ 正确的AI："抱歉，不能跳过阶段。需要先完成：
-   1. REQUIREMENTS - 定义登录功能的需求和验收标准
-   2. DESIGN - 设计认证架构和API
-   3. PLAN - 制定可执行步骤
+✅ Correct AI: "Sorry, cannot skip phases. Need to complete first:
+   1. REQUIREMENTS - Define login feature requirements and acceptance criteria
+   2. DESIGN - Design auth architecture and API
+   3. PLAN - Create executable steps
    
-   让我们从需求分析开始。请描述登录功能的具体需求。"
+   Let's start with requirements analysis. Please describe specific requirements for login feature."
 ```
 
 ---
 
-### ❌ AP-002: 牛仔编程（Cowboy Coding）
+### ❌ AP-002: Cowboy Coding
 
-**表现**：
-- 在 plan.md 未完成或未批准时就开始写代码
-- "我先写一点试试"
+**Manifestation**:
+- Writing code before plan.md is complete or approved
+- "Let me write some code to try"
 
-**为什么错误**：
-- 没有验证标准 → 无法知道是否正确
-- 没有步骤分解 → 容易遗漏或返工
-- 违反"文档即代码"原则
+**Why Wrong**:
+- No verification criteria → Cannot know if correct
+- No step decomposition → Easy to miss or rework
+- Violates "documentation as code" principle
 
-**正确做法**：
+**Correct Approach**:
 ```
-✅ 检查：plan.md 是否存在且状态 = APPROVED
-   IF 否 → 拒绝写代码
-   IF 是 → 严格按照 plan.md 执行
+✅ Check: Does plan.md exist and status = APPROVED
+   IF NO → Refuse to write code
+   IF YES → Strictly execute according to plan.md
 ```
 
 ---
 
-### ❌ AP-003: 友好QA（Rubber Stamp QA）
+### ❌ AP-003: Rubber Stamp QA
 
-**表现**：
+**Manifestation**:
 ```
-QA检查：
-"看起来不错！✅ 批准通过。"
-（实际上文档缺少关键部分）
+QA Check:
+"Looks good! ✅ Approved for pass."
+(Actually document missing critical parts)
 ```
 
-**为什么错误**：
-- QA 是最后一道防线，必须挑剔
-- "友好"的QA = 无用的QA
-- 会让错误流入下一阶段
+**Why Wrong**:
+- QA is the last line of defense, must be picky
+- "Friendly" QA = Useless QA
+- Lets errors flow into next phase
 
-**正确做法**：
+**Correct Approach**:
 ```
-✅ QA 必须对抗性审查：
-   - 主动寻找问题（不是寻找优点）
-   - 使用"拒绝标准"逐项检查
-   - 宁可误拒，不可误批
+✅ QA must conduct adversarial review:
+   - Actively seek problems (not seek strengths)
+   - Use "rejection criteria" to check each item
+   - Better to mistakenly reject than mistakenly approve
    
-   示例：
-   "❌ REQUIREMENTS 被拒绝。问题：
-    1. 场景2缺少Given-When-Then格式
-    2. 验收标准模糊：'快速响应'应该量化为'<200ms'
-    3. 未说明错误处理场景"
+   Example:
+   "❌ REQUIREMENTS rejected. Issues:
+    1. Scenario 2 missing Given-When-Then format
+    2. Acceptance criteria vague: 'fast response' should be quantified as '<200ms'
+    3. Error handling scenario not specified"
 ```
 
 ---
 
-## 2. 实现违规（Implementation Violations）
+## 2. Implementation Violations
 
-### ❌ AP-004: 跳过验证（Skipping Verification）
+### ❌ AP-004: Skipping Verification
 
-**表现**：
+**Manifestation**:
 ```
-AI 执行步骤 1.1："创建 User model"
-AI："完成！现在执行步骤 1.2..."
-（没有运行 `npm run build` 验证）
-```
-
-**为什么错误**：
-- 可能引入编译错误但不自知
-- 违反"绿到绿"原则
-- 后续步骤基于错误的假设
-
-**正确做法**：
-```
-✅ 每步后必须：
-   1. 运行验证命令（plan.md 中定义的）
-   2. 检查输出
-   3. IF 失败 → 修复后重新验证
-   4. IF 通过 → 标记步骤为 [x]，继续下一步
+AI executes step 1.1: "Create User model"
+AI: "Done! Now executing step 1.2..."
+(Did not run `npm run build` to verify)
 ```
 
----
+**Why Wrong**:
+- May introduce compilation errors without knowing
+- Violates "green-to-green" principle
+- Subsequent steps based on wrong assumptions
 
-### ❌ AP-005: 计划偏离（Plan Deviation）
-
-**表现**：
+**Correct Approach**:
 ```
-Plan.md："创建 user.ts 在 src/models/"
-AI："我觉得放在 src/entities/ 更好，我改一下..."
-```
-
-**为什么错误**：
-- IMPLEMENTATION 角色是"初级开发"，不做架构决策
-- 偏离计划会导致后续步骤失败
-- 如果计划有问题，应该报告，不是自行修改
-
-**正确做法**：
-```
-✅ IF 发现计划问题：
-   1. 停止执行
-   2. 生成偏差报告（Deviation Report）
-   3. 建议："此步骤需要回退到 DESIGN/PLAN 阶段修改"
-   4. 等待批准后再继续
+✅ After each step must:
+   1. Run verification command (defined in plan.md)
+   2. Check output
+   3. IF fail → Fix code → Re-verify
+   4. IF pass → Mark step as [x], continue to next
 ```
 
 ---
 
-### ❌ AP-006: 多步合并（Step Merging）
+### ❌ AP-005: Plan Deviation
 
-**表现**：
+**Manifestation**:
 ```
-AI："步骤 1.1 和 1.2 很简单，我一起做了：
-    - 创建 User model ✅
-    - 创建 User API ✅
-    - 创建 User UI ✅
-    完成！"
+Plan.md: "Create user.ts in src/models/"
+AI: "I think putting it in src/entities/ is better, let me change..."
 ```
 
-**为什么错误**：
-- 大改动容易出错且难以定位
-- 跳过了中间验证点
-- 违反原子性原则
+**Why Wrong**:
+- IMPLEMENTATION role is "junior developer", doesn't make architecture decisions
+- Deviating from plan will cause subsequent steps to fail
+- If plan has issues, should report, not self-modify
 
-**正确做法**：
+**Correct Approach**:
 ```
-✅ 一次只执行一个步骤：
-   Step 1.1: 创建 User model
+✅ IF discover plan issues:
+   1. Stop execution
+   2. Generate Deviation Report
+   3. Suggest: "This step needs to backtrack to DESIGN/PLAN phase for modification"
+   4. Continue after approval
+```
+
+---
+
+### ❌ AP-006: Step Merging
+
+**Manifestation**:
+```
+AI: "Steps 1.1 and 1.2 are simple, I did them together:
+    - Created User model ✅
+    - Created User API ✅
+    - Created User UI ✅
+    Done!"
+```
+
+**Why Wrong**:
+- Large changes prone to errors and hard to locate
+- Skipped intermediate verification points
+- Violates atomicity principle
+
+**Correct Approach**:
+```
+✅ Execute only one step at a time:
+   Step 1.1: Create User model
    Verify: npm run build ✅
    
-   Step 1.2: 创建 User API
+   Step 1.2: Create User API
    Verify: npm test user.test.ts ✅
    
-   Step 1.3: 创建 User UI
-   Verify: npm run dev, 手动测试 ✅
+   Step 1.3: Create User UI
+   Verify: npm run dev, manual test ✅
 ```
 
 ---
 
-## 3. 上下文违规（Context Violations）
+## 3. Context Violations
 
-### ❌ AP-007: 假设文件存在（Assuming Files Exist）
+### ❌ AP-007: Assuming Files Exist
 
-**表现**：
+**Manifestation**:
 ```
-AI："我将在 src/utils/api.ts 中添加 fetchUser 函数..."
-（实际上 api.ts 不存在）
+AI: "I will add fetchUser function in src/utils/api.ts..."
+(Actually api.ts doesn't exist)
 ```
 
-**为什么错误**：
-- 幻觉（Hallucination）
-- 导致计划失败
-- 浪费时间
+**Why Wrong**:
+- Hallucination
+- Causes plan to fail
+- Wastes time
 
-**正确做法**：
+**Correct Approach**:
 ```
-✅ PREWORK 阶段必须：
-   1. 用 `ls src/utils/` 确认文件列表
-   2. 用 `grep -r "api" src/` 搜索相关代码
-   3. 只引用已验证存在的文件
+✅ PREWORK phase must:
+   1. Use `ls src/utils/` to confirm file list
+   2. Use `grep -r "api" src/` to search related code
+   3. Only reference verified existing files
    
-   IF 文件不存在 → 在 PLAN 中添加"创建文件"步骤
+   IF file doesn't exist → Add "create file" step in PLAN
 ```
 
 ---
 
-### ❌ AP-008: 重复造轮子（Reinventing the Wheel）
+### ❌ AP-008: Reinventing the Wheel
 
-**表现**：
+**Manifestation**:
 ```
-AI："我创建了一个新的 Button 组件..."
-（项目中已有 src/components/ui/button.tsx）
+AI: "I created a new Button component..."
+(Project already has src/components/ui/button.tsx)
 ```
 
-**为什么错误**：
-- 代码冗余
-- 样式不一致
-- 维护成本增加
+**Why Wrong**:
+- Code redundancy
+- Style inconsistency
+- Increased maintenance cost
 
-**正确做法**：
+**Correct Approach**:
 ```
-✅ PREWORK 阶段必须：
-   1. 用 `ls src/components/ui/` 列出已有组件
-   2. 搜索相似功能："我们有类似的 Modal/Button/Table 吗？"
-   3. 在 DESIGN 中明确：复用 vs 新建
+✅ PREWORK phase must:
+   1. Use `ls src/components/ui/` to list existing components
+   2. Search similar functionality: "Do we have similar Modal/Button/Table?"
+   3. Explicitly in DESIGN: Reuse vs Create new
 ```
 
 ---
 
-### ❌ AP-009: 技术栈不匹配（Tech Stack Mismatch）
+### ❌ AP-009: Tech Stack Mismatch
 
-**表现**：
+**Manifestation**:
 ```
-AI："我使用 axios 来发请求..."
-（项目用的是 fetch 或 ky）
+AI: "I use axios to make requests..."
+(Project uses fetch or ky)
 ```
 
-**为什么错误**：
-- 引入不必要的依赖
-- 风格不一致
-- 可能有配置冲突
+**Why Wrong**:
+- Introduces unnecessary dependencies
+- Style inconsistency
+- May have configuration conflicts
 
-**正确做法**：
+**Correct Approach**:
 ```
-✅ PREWORK 阶段必须：
-   1. 读取 package.json 识别已安装的库
-   2. 检查 tsconfig.json / next.config.js 等配置
-   3. 遵循项目现有模式
+✅ PREWORK phase must:
+   1. Read package.json to identify installed libraries
+   2. Check tsconfig.json / next.config.js etc configurations
+   3. Follow project existing patterns
    
-   示例：
-   "📋 项目技术栈：
-    - HTTP客户端：ky
-    - 状态管理：Zustand
-    - 样式：Tailwind + Shadcn UI
+   Example:
+   "📋 Project Tech Stack:
+    - HTTP Client: ky
+    - State Management: Zustand
+    - Styling: Tailwind + Shadcn UI
     
-    所有设计必须遵循此栈。"
+    All designs must follow this stack."
 ```
 
 ---
 
-## 4. 沟通违规（Communication Violations）
+## 4. Communication Violations
 
-### ❌ AP-010: 静默失败（Silent Failures）
+### ❌ AP-010: Silent Failures
 
-**表现**：
+**Manifestation**:
 ```
-AI 运行："npm run build"
-输出：Error: Cannot find module 'zod'
-AI："完成！继续下一步..."
-（忽略了错误）
+AI runs: "npm run build"
+Output: Error: Cannot find module 'zod'
+AI: "Done! Continue to next step..."
+(Ignored the error)
 ```
 
-**为什么错误**：
-- 错误会累积
-- 后续步骤基于错误假设
-- 浪费时间追查根源
+**Why Wrong**:
+- Errors accumulate
+- Subsequent steps based on wrong assumptions
+- Wastes time tracking root cause
 
-**正确做法**：
+**Correct Approach**:
 ```
-✅ 任何命令失败必须：
-   1. 停止执行
-   2. 分析错误
-   3. 尝试修复（最多3次）
-   4. 如无法修复 → 上报
+✅ Any command failure must:
+   1. Stop execution
+   2. Analyze error
+   3. Try to fix (max 3 attempts)
+   4. If cannot fix → Report
    
-   输出：
-   "❌ 步骤 1.2 验证失败
-    错误：Cannot find module 'zod'
+   Output:
+   "❌ Step 1.2 verification failed
+    Error: Cannot find module 'zod'
     
-    分析：缺少依赖
-    修复：运行 `npm install zod`
-    重新验证..."
+    Analysis: Missing dependency
+    Fix: Run `npm install zod`
+    Re-verifying..."
 ```
 
 ---
 
-### ❌ AP-011: 只聊不写（Chat-Only Decisions）
+### ❌ AP-011: Chat-Only Decisions
 
-**表现**：
+**Manifestation**:
 ```
-用户："用户表需要加一个 avatar 字段"
-AI："好的，记住了！"
-（没有更新 design.md 或创建 Change Request）
+User: "用户表需要加一个 avatar 字段" / "User table needs an avatar field"
+AI: "好的,记住了!" / "OK, noted!"
+(Did not update design.md or create Change Request)
 ```
 
-**为什么错误**：
-- 聊天记录会丢失
-- 后续会话无法获取此信息
-- 文档与实际不一致
+**Why Wrong**:
+- Chat history gets lost
+- Subsequent sessions cannot get this information
+- Documentation inconsistent with actual
 
-**正确做法**：
+**Correct Approach**:
 ```
-✅ 重要决策必须写入文件：
-   1. IF 改需求 → 创建 Change Request in STATUS.json
-   2. IF 改设计 → 更新 design.md
-   3. IF 改计划 → 更新 plan.md
+✅ Important decisions must write to files:
+   1. IF change requirement → Create Change Request in STATUS.json
+   2. IF change design → Update design.md
+   3. IF change plan → Update plan.md
    
-   输出：
-   "✅ 已记录变更：
-    - 创建 CR-001 in STATUS.json
-    - 更新 design.md Section 3.2（User Schema）
-    - 标记 PLAN 为 INVALIDATED（需重新生成）"
+   Output:
+   "✅ Change recorded:
+    - Created CR-001 in STATUS.json
+    - Updated design.md Section 3.2 (User Schema)
+    - Marked PLAN as INVALIDATED (needs regeneration)"
 ```
 
 ---
 
-### ❌ AP-012: 无限重试（Infinite Retry）
+### ❌ AP-012: Infinite Retry
 
-**表现**：
+**Manifestation**:
 ```
-AI："尝试1失败，再试一次..."
-AI："尝试2失败，再试一次..."
-AI："尝试3失败，再试一次..."
-AI："尝试4失败，再试一次..."
-（无限循环）
+AI: "Attempt 1 failed, trying again..."
+AI: "Attempt 2 failed, trying again..."
+AI: "Attempt 3 failed, trying again..."
+AI: "Attempt 4 failed, trying again..."
+(Infinite loop)
 ```
 
-**为什么错误**：
-- 浪费资源
-- 可能是根本性问题（如计划错误）
-- 无法自行解决的问题
+**Why Wrong**:
+- Wastes resources
+- May be fundamental issue (like plan error)
+- Cannot self-resolve problems
 
-**正确做法**：
+**Correct Approach**:
 ```
-✅ 3次规则：
-   1. 尝试1：直接修复
-   2. 尝试2：深入分析
-   3. 尝试3：最后尝试
-   4. 如仍失败 → 停止并上报
+✅ 3-Attempt Rule:
+   1. Attempt 1: Direct fix
+   2. Attempt 2: Deep analysis
+   3. Attempt 3: Last try
+   4. If still fails → Stop and report
    
-   输出：
-   "❌ 步骤 2.1 在3次尝试后仍然失败
+   Output:
+   "❌ Step 2.1 still failed after 3 attempts
     
-    问题：TypeScript类型不匹配
-    尝试过的方法：
-    1. 调整类型定义
-    2. 添加类型断言
-    3. 检查 tsconfig.json
+    Problem: TypeScript type mismatch
+    Attempted methods:
+    1. Adjusted type definition
+    2. Added type assertion
+    3. Checked tsconfig.json
     
-    建议：此问题可能是 DESIGN 阶段的类型定义有误。
-    需要回退到 DESIGN 阶段重新审查类型系统。
+    Suggestion: This problem may be type definition error in DESIGN phase.
+    Need to backtrack to DESIGN phase to re-examine type system.
     
-    生成偏差报告..."
+    Generating deviation report..."
 ```
 
 ---
 
-## 5. 质量违规（Quality Violations）
+## 5. Quality Violations
 
-### ❌ AP-013: 大爆炸规划（Big Bang Planning）
+### ❌ AP-013: Big Bang Planning
 
-**表现**：
+**Manifestation**:
 ```
 Plan.md:
-Phase 1: 完成所有数据库模型（20个表）
-Phase 2: 完成所有API（50个端点）
-Phase 3: 完成所有UI（30个页面）
+Phase 1: Complete all database models (20 tables)
+Phase 2: Complete all APIs (50 endpoints)
+Phase 3: Complete all UIs (30 pages)
 ```
 
-**为什么错误**：
-- 水平切片，无法提前验证集成
-- 风险延迟到最后才发现
-- 无法 Demo 中间状态
+**Why Wrong**:
+- Horizontal slicing, cannot verify integration early
+- Risks delayed until the end to discover
+- Cannot demo intermediate states
 
-**正确做法**：
+**Correct Approach**:
 ```
-✅ 垂直切片：
-Phase 1: 用户注册完整流程
-  - Step 1.1: User 表
+✅ Vertical slicing:
+Phase 1: User registration complete flow
+  - Step 1.1: User table
   - Step 1.2: POST /api/signup
-  - Step 1.3: Signup 页面
-  → Milestone: 可以注册用户 ✅
+  - Step 1.3: Signup page
+  → Milestone: Can register users ✅
 
-Phase 2: 用户登录完整流程
-  - Step 2.1: Session 表
+Phase 2: User login complete flow
+  - Step 2.1: Session table
   - Step 2.2: POST /api/login
-  - Step 2.3: Login 页面
-  → Milestone: 可以登录 ✅
+  - Step 2.3: Login page
+  → Milestone: Can login ✅
 ```
 
 ---
 
-### ❌ AP-014: 过度设计（Over-Engineering）
+### ❌ AP-014: Over-Engineering
 
-**表现**：
+**Manifestation**:
 ```
-需求："用户可以上传头像"
-设计："我们构建一个微服务架构的图片处理系统，
-      支持实时滤镜、AI美颜、CDN分发..."
+Requirement: "用户可以上传头像" / "User can upload avatar"
+Design: "我们构建一个微服务架构的图片处理系统,
+      支持实时滤镜、AI美颜、CDN分发..." /
+      "We build a microservice architecture image processing system,
+       supporting real-time filters, AI beauty, CDN distribution..."
 ```
 
-**为什么错误**：
-- 复杂度爆炸
-- 延长开发时间
-- 增加维护成本
+**Why Wrong**:
+- Complexity explosion
+- Extends development time
+- Increases maintenance cost
 
-**正确做法**：
+**Correct Approach**:
 ```
-✅ 简单优先（KISS原则）：
-   MVP设计："使用现有的云存储服务（如S3），
-           上传时调整大小到 256x256，
-           保存 URL 到数据库"
+✅ Simplicity first (KISS principle):
+   MVP design: "Use existing cloud storage service (like S3),
+           resize to 256x256 when uploading,
+           save URL to database"
    
-   复杂功能留到 Phase 2（如果确实需要）
+   Complex features leave to Phase 2 (if really needed)
 ```
 
 ---
 
-### ❌ AP-015: 模糊验证标准（Vague Verification）
+### ❌ AP-015: Vague Verification
 
-**表现**：
+**Manifestation**:
 ```
 Plan.md Step 1.1:
-  Action: 创建 User API
-  Verify: "测试一下"
+  Action: Create User API
+  Verify: "测试一下" / "test it"
 ```
 
-**为什么错误**：
-- "测试一下"太模糊
-- 不同人理解不同
-- 无法自动化
+**Why Wrong**:
+- "Test it" too vague
+- Different people understand differently
+- Cannot automate
 
-**正确做法**：
+**Correct Approach**:
 ```
-✅ 精确的验证命令：
-   Step 1.1: 创建 User API
+✅ Precise verification commands:
+   Step 1.1: Create User API
    Verify: `npm test src/api/user.test.ts`
    Expected: All tests pass (0 failed)
    
-   Step 1.2: 集成到路由
+   Step 1.2: Integrate to router
    Verify: `curl -X POST http://localhost:3000/api/user -d '{"name":"test"}'`
-   Expected: HTTP 200, 返回 user ID
+   Expected: HTTP 200, returns user ID
 ```
 
 ---
 
-## 6. 违规检测清单
+## 6. Violation Detection Checklist
 
-在每个阶段结束时，AI 应该自查：
+At end of each phase, AI should self-check:
 
-### PREWORK 阶段
-- [ ] 我验证了所有提到的文件路径吗？（AP-007）
-- [ ] 我搜索了现有的相似功能吗？（AP-008）
-- [ ] 我检查了 package.json 吗？（AP-009）
+### PREWORK Phase
+- [ ] Did I verify all mentioned file paths? (AP-007)
+- [ ] Did I search for existing similar features? (AP-008)
+- [ ] Did I check package.json? (AP-009)
 
-### REQUIREMENTS 阶段
-- [ ] 我避免提及具体技术实现了吗？（不是 REQUIREMENTS 的范围）
-- [ ] 我写了具体的验收标准吗？（AP-015）
+### REQUIREMENTS Phase
+- [ ] Did I avoid mentioning specific technical implementation? (Not REQUIREMENTS scope)
+- [ ] Did I write specific acceptance criteria? (AP-015)
 
-### DESIGN 阶段
-- [ ] 我避免过度设计了吗？（AP-014）
-- [ ] 我考虑了复用现有组件吗？（AP-008）
-- [ ] 我使用了项目的技术栈吗？（AP-009）
+### DESIGN Phase
+- [ ] Did I avoid over-engineering? (AP-014)
+- [ ] Did I consider reusing existing components? (AP-008)
+- [ ] Did I use project tech stack? (AP-009)
 
-### PLAN 阶段
-- [ ] 我使用了垂直切片吗？（AP-013）
-- [ ] 每个步骤都有精确的验证命令吗？（AP-015）
-- [ ] 步骤是原子的吗（≤30分钟）？（AP-006）
+### PLAN Phase
+- [ ] Did I use vertical slicing? (AP-013)
+- [ ] Does every step have precise verification command? (AP-015)
+- [ ] Are steps atomic (≤30 min)? (AP-006)
 
-### IMPLEMENTATION 阶段
-- [ ] 我严格按照计划执行了吗？（AP-005）
-- [ ] 我每步后都运行了验证吗？（AP-004）
-- [ ] 我一次只做一个步骤吗？（AP-006）
-- [ ] 我在失败时停止并报告了吗？（AP-010, AP-012）
+### IMPLEMENTATION Phase
+- [ ] Did I strictly follow plan? (AP-005)
+- [ ] Did I run verification after each step? (AP-004)
+- [ ] Do I do only one step at a time? (AP-006)
+- [ ] Did I stop and report when failing? (AP-010, AP-012)
 
-### QA 阶段
-- [ ] 我采用了对抗性审查吗？（AP-003）
-- [ ] 我主动寻找问题了吗？
-- [ ] 我使用了明确的拒绝标准吗？
-
----
-
-## 7. 违规处罚（对AI的要求）
-
-当检测到反模式时，AI **必须**：
-
-1. **停止当前操作**
-2. **识别反模式类型**（如 "AP-005: 计划偏离"）
-3. **解释为什么这是错误的**
-4. **提供正确做法**
-5. **询问用户是否继续正确的方式**
-
-**示例输出**：
-```
-⚠️  检测到反模式：AP-005 (计划偏离)
-
-您说："把文件放在 entities/ 而不是 models/"
-
-为什么这是错误的：
-- IMPLEMENTATION 阶段不应做架构决策
-- Plan.md 明确指定了路径
-- 偏离可能导致后续步骤失败
-
-正确做法：
-1. 如果认为计划有误，生成偏差报告
-2. 建议回退到 DESIGN/PLAN 阶段
-3. 等待批准后再执行修改
-
-是否生成偏差报告？(yes/no)
-```
+### QA Phase
+- [ ] Did I adopt adversarial review? (AP-003)
+- [ ] Did I actively seek problems?
+- [ ] Did I use explicit rejection criteria?
 
 ---
 
-## 8. 反模式优先级
+## 7. Violation Penalties (Requirements for AI)
 
-| 优先级 | 反模式 | 严重性 | 是否自动拒绝 |
+When detecting anti-patterns, AI **MUST**:
+
+1. **Stop current operation**
+2. **Identify anti-pattern type** (e.g. "AP-005: Plan Deviation")
+3. **Explain why this is wrong**
+4. **Provide correct approach**
+5. **Ask user if continuing correct way**
+
+**Example Output**:
+```
+⚠️  Detected Anti-Pattern: AP-005 (Plan Deviation)
+
+You said: "把文件放在 entities/ 而不是 models/" / "Put file in entities/ instead of models/"
+
+Why this is wrong:
+- IMPLEMENTATION phase should not make architecture decisions
+- Plan.md explicitly specified path
+- Deviation may cause subsequent steps to fail
+
+Correct approach:
+1. If think plan is wrong, generate deviation report
+2. Suggest backtracking to DESIGN/PLAN phase
+3. Execute modification after approval
+
+Generate deviation report? (yes/no)
+```
+
+---
+
+## 8. Anti-Pattern Priority
+
+| Priority | Anti-Pattern | Severity | Auto-Reject |
 |--------|--------|--------|------------|
-| P0 | AP-001 跳阶段 | 🔴 严重 | ✅ 是 |
-| P0 | AP-002 牛仔编程 | 🔴 严重 | ✅ 是 |
-| P0 | AP-004 跳过验证 | 🔴 严重 | ✅ 是 |
-| P1 | AP-003 友好QA | 🟠 高 | ✅ 是 |
-| P1 | AP-005 计划偏离 | 🟠 高 | ✅ 是（生成报告） |
-| P1 | AP-007 假设文件 | 🟠 高 | ✅ 是 |
-| P1 | AP-010 静默失败 | 🟠 高 | ✅ 是 |
-| P2 | AP-006 多步合并 | 🟡 中 | ⚠️ 警告 |
-| P2 | AP-008 重复造轮子 | 🟡 中 | ⚠️ 警告 |
-| P2 | AP-011 只聊不写 | 🟡 中 | ⚠️ 警告 |
-| P2 | AP-012 无限重试 | 🟡 中 | ⚠️ 警告（3次后强制停止） |
-| P3 | AP-013 大爆炸规划 | 🔵 低 | ⚠️ 建议改进 |
-| P3 | AP-014 过度设计 | 🔵 低 | ⚠️ 建议简化 |
+| P0 | AP-001 Phase Skipping | 🔴 Critical | ✅ Yes |
+| P0 | AP-002 Cowboy Coding | 🔴 Critical | ✅ Yes |
+| P0 | AP-004 Skipping Verification | 🔴 Critical | ✅ Yes |
+| P1 | AP-003 Rubber Stamp QA | 🟠 High | ✅ Yes |
+| P1 | AP-005 Plan Deviation | 🟠 High | ✅ Yes (generate report) |
+| P1 | AP-007 Assuming Files | 🟠 High | ✅ Yes |
+| P1 | AP-010 Silent Failures | 🟠 High | ✅ Yes |
+| P2 | AP-006 Step Merging | 🟡 Medium | ⚠️ Warning |
+| P2 | AP-008 Reinventing Wheel | 🟡 Medium | ⚠️ Warning |
+| P2 | AP-011 Chat-Only Decisions | 🟡 Medium | ⚠️ Warning |
+| P2 | AP-012 Infinite Retry | 🟡 Medium | ⚠️ Warning (force stop after 3) |
+| P3 | AP-013 Big Bang Planning | 🔵 Low | ⚠️ Suggest improvement |
+| P3 | AP-014 Over-Engineering | 🔵 Low | ⚠️ Suggest simplification |
 
 ---
 
-## 总结
+## Summary
 
-记住：
-- **Anti-Pattern 不是"建议"，是"禁令"**
-- **检测到 P0/P1 反模式时，必须拒绝继续**
-- **宁可被骂"太严格"，不可让错误通过**
+Remember:
+- **Anti-Pattern is not "suggestion", it's "prohibition"**
+- **When detecting P0/P1 anti-patterns, must refuse to continue**
+- **Better be blamed "too strict" than let errors pass**
 
-> **格言："质量是设计出来的，不是测试出来的；流程是强制执行的，不是建议遵守的。"**
-
+> **Motto: "Quality is designed in, not tested in; Process is enforced, not suggested."**
