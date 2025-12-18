@@ -1,0 +1,7 @@
+{
+    "build": {
+        "command": "npm run docs:build",
+        "cwd": "/",
+        "destination": ".vitepress/dist"
+    }
+}
